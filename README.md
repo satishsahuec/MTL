@@ -21,3 +21,4 @@ call START /B "m3" java -jar target\logistics-0.0.1-SNAPSHOT.jar
 cd ../node-app
 npm install
 call START /B "m3" node lib\index.js
+
