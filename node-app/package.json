@@ -1,0 +1,23 @@
+{
+  "name": "metallica",
+  "version": "1.0.0",
+  "description": "Metallica Demo",
+  "author": "Satish Sahu",
+  "scripts": {
+    "start": "node lib/index",
+    "dev": "nodemon -exec node lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/"
+  },
+  "dependencies": {
+    "amqplib": "^0.5.1",
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.9.2"
+  }
+}
