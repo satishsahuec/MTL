@@ -1,6 +1,6 @@
 # MTL
 
-for windows 
+#for windows 
 
 cd trade
 mvn clean
