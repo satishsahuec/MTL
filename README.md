@@ -1,4 +1,4 @@
-# MTL
+# sample Project to integrate graphqp amqplib mongodb rabbitmq springboot 
 
 #   for windows only 
 
