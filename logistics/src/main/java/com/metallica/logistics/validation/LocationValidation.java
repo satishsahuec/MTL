@@ -16,7 +16,7 @@ public class LocationValidation {
 
 	@Autowired
 	private RabbitTemplate template;
-
+	//Validation of transport location 
 	public boolean validateTransport(Transport transportdata) throws AmqpException, JsonProcessingException {
 
 		ObjectMapper mapper = new ObjectMapper();

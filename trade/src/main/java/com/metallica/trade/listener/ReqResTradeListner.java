@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.metallica.trade.dao.SearchCriteria;
+import com.metallica.trade.dao.util.SearchCriteria;
 import com.metallica.trade.dao.Trade;
-import com.metallica.trade.dao.TradeImpl;
+import com.metallica.trade.dao.impl.TradeImpl;
 
 @Component
 public class ReqResTradeListner {

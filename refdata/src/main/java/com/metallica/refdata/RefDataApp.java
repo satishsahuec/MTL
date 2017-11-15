@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.core.MongoOperations;
 
 import com.metallica.refdata.dao.Commodity;
-import com.metallica.refdata.dao.Counter;
 import com.metallica.refdata.dao.CounterParty;
 import com.metallica.refdata.dao.Location;
+import com.metallica.refdata.dao.util.Counter;
 import com.metallica.refdata.repository.CommodityRepository;
 import com.metallica.refdata.repository.CounterPartyRepository;
 import com.metallica.refdata.repository.LocationRepository;
@@ -32,14 +32,14 @@ public class RefDataApp implements CommandLineRunner {
 		System.out.println("Ref Data Service up and running ");
 
 	}
-
+	//As of now hardcode Data is added Later Same As Trade service CURD operation can be done from frontend
 	public void run(String... args) throws Exception {
 
 		locationRepository.deleteAll();
 
 		locationRepository.save(new Location("London", "LON"));
 		locationRepository.save(new Location("New York", "NY"));
-		locationRepository.save(new Location("Karnataka", "KA"));
+		locationRepository.save(new Location("Mumbai", "KA"));
 
 		commodityRepository.deleteAll();
 
@@ -53,9 +53,9 @@ public class RefDataApp implements CommandLineRunner {
 		counterPartyRepository.save(new CounterParty("ZET", "Zeeta corporation Inc"));
 		counterPartyRepository.save(new CounterParty("SAP", "Sapient"));
 		
-		Counter count=new Counter("users" ,0);
-		
-		mongoOperation.save(count, "counter");
+		Counter count = new Counter("user", 0);
+		if (!mongoOperation.collectionExists("counter"))
+			mongoOperation.save(count, "counter");
 
 		System.out.println("Dummy Data inserted sucessfully");
 

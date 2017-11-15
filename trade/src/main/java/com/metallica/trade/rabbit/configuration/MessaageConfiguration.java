@@ -18,44 +18,36 @@ public class MessaageConfiguration {
 		return new DirectExchange("trade");
 	}
 
-	/*
-	 * @Bean public DirectExchange tradeEvent() { return new
-	 * DirectExchange("tradeEvent"); }
-	 * 
-	 * @Bean public DirectExchange tradeReq() { return new
-	 * DirectExchange("tradeReq"); }
-	 */
-
 	private static class ReceiverConfig {
 
 		@Bean
-		public Queue autoDeleteQueue1() {
+		public Queue tradeEvent() {
 			return new Queue("tradeEvent");
 		}
 
 		@Bean
-		public Queue autoDeleteQueue2() {
+		public Queue tradeCommand() {
 			return new Queue("tradeCommand");
 		}
 
 		@Bean
-		public Queue autoDeleteQueue3() {
+		public Queue tradeReqRes() {
 			return new Queue("tradeReqRes");
 		}
 
 		@Bean
-		public Binding binding1a(DirectExchange trade, Queue autoDeleteQueue1) {
-			return BindingBuilder.bind(autoDeleteQueue1).to(trade).with("tradeEvent");
+		public Binding binding1a(DirectExchange trade, Queue tradeEvent) {
+			return BindingBuilder.bind(tradeEvent).to(trade).with("tradeEvent");
 		}
 
 		@Bean
-		public Binding binding1b(DirectExchange trade, Queue autoDeleteQueue2) {
-			return BindingBuilder.bind(autoDeleteQueue2).to(trade).with("tradeCommand");
+		public Binding binding1b(DirectExchange trade, Queue tradeCommand) {
+			return BindingBuilder.bind(tradeCommand).to(trade).with("tradeCommand");
 		}
 
 		@Bean
-		public Binding binding1c(DirectExchange trade, Queue autoDeleteQueue3) {
-			return BindingBuilder.bind(autoDeleteQueue3).to(trade).with("tradeReqRes");
+		public Binding binding1c(DirectExchange trade, Queue tradeReqRes) {
+			return BindingBuilder.bind(tradeReqRes).to(trade).with("tradeReqRes");
 		}
 
 	}

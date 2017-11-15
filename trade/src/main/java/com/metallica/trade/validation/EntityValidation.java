@@ -20,8 +20,7 @@ public class EntityValidation {
 
 		ObjectMapper mapper = new ObjectMapper();
 
-		Boolean response = (Boolean) template.convertSendAndReceive("refdata", "refdatavalidation",
-				mapper.writeValueAsString(tradeData));
+		Boolean response = (Boolean) template.convertSendAndReceive("refdata", "refdatavalidation",mapper.writeValueAsString(tradeData));
 		System.out.println(" Got response from Refdata validation of Entity '" + response + "'");
 		return response;
 	}

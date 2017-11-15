@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoOperations;
 
-import com.metallica.logistics.dao.Counter;
+import com.metallica.logistics.dao.util.Counter;
 
 @SpringBootApplication
 public class LogisticApp implements CommandLineRunner {
@@ -22,9 +22,9 @@ public class LogisticApp implements CommandLineRunner {
 	}
 
 	public void run(String... args) throws Exception {
-
+		//Auto incremented Sequence for _id in mongo DB
 		Counter count = new Counter("user", 0);
-
-		mongoOperation.save(count, "counter");
+		if (!mongoOperation.collectionExists("counter"))
+			mongoOperation.save(count, "counter");
 	}
 }

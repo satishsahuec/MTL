@@ -9,7 +9,6 @@ var amqp = require('amqplib/callback_api');
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log('server running on PORT ' + PORT);
-  console.log('Hit the URL at  http://localhost:4000/metallica');
 });
 
 const ncSchema = require('../schema');

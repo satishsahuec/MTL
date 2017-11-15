@@ -1,5 +1,7 @@
 package com.metallica.logistics.dao;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,24 +16,10 @@ public class Transport {
 	private String transportId;
 	private String origin ;
 	private String destination ;
-	private String loadingDate ;
-	private String unloadingDate ;
+	private Date loadingDate ;
+	private Date unloadingDate ;
 	private TransportType transportType;
-	
-	public Transport() {
-		// TODO Auto-generated constructor stub
-	}
-	public Transport(String transportId, String origin, String destination, String loadingDate, String unloadingDate,
-			TransportType transportType) {
-		super();
-		this.transportId = transportId;
-		this.origin = origin;
-		this.destination = destination;
-		this.loadingDate = loadingDate;
-		this.unloadingDate = unloadingDate;
-		this.transportType = transportType;
-	}
-	
+		
 	public String getTransportId() {
 		return transportId;
 	}
@@ -50,16 +38,16 @@ public class Transport {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	public String getLoadingDate() {
+	public Date getLoadingDate() {
 		return loadingDate;
 	}
-	public void setLoadingDate(String loadingDate) {
+	public void setLoadingDate(Date loadingDate) {
 		this.loadingDate = loadingDate;
 	}
-	public String getUnloadingDate() {
+	public Date getUnloadingDate() {
 		return unloadingDate;
 	}
-	public void setUnloadingDate(String unloadingDate) {
+	public void setUnloadingDate(Date unloadingDate) {
 		this.unloadingDate = unloadingDate;
 	}
 	public TransportType getTransportType() {

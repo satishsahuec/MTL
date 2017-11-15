@@ -22,14 +22,14 @@ const DeleteTradeInputType = new GraphQLInputObjectType({
       type: new GraphQLNonNull(GraphQLString)
     },
     tradeId: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLID)
     },
 
   }
 });
 
-var corrId = require('../../../lib/randomnumber')();
-
+const messagePubSub = require('../../../message-broker/pub-sub');
+const tradeMessageConfig = require('../../../config/trade-message-config');
 module.exports = {
   type: DeleteTradeOutput,
   args: {
@@ -39,33 +39,7 @@ module.exports = {
   },
   resolve(obj, { input }, { amqp }) {
 
-    return{ deleteResult : name(amqp, input)}
+    return{ deleteResult : (amqp, input ,tradeMessageConfig.exchangeName, tradeMessageConfig.commandQueueBinding)}
   }
 }
 
-function name(amqp, input) {
-  return new Promise(function (resolve, reject) {
-    amqp.connect('amqp://localhost', function (err, conn) {
-      conn.createChannel(function (err, ch) {
-        ch.assertQueue('', { exclusive: true }, function (err, q) {
-          var corr = corrId;
-
-          ch.consume(q.queue, function (msg) {
-            if (msg.properties.correlationId == corr) {
-              console.log(' Response Got %s', msg.content.toString());
-              
-              resolve(msg.content.toString())
-              setTimeout(function () {conn.close(); }, 500);
-
-            }
-          }, { noAck: true });
-
-          ch.publish('trade', 'tradeCommand', new Buffer(JSON.stringify(input)), {
-            correlationId: corr,
-            replyTo: q.queue
-          });
-        });
-      });
-    });
-  })
-}

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.metallica.logistics.dao.Action;
+import com.metallica.logistics.dao.util.Action;
+import com.metallica.logistics.dao.util.CounterService;
 import com.metallica.logistics.dao.Transport;
-import com.metallica.logistics.dao.TransportImpl;
 import com.metallica.logistics.dao.TransportNomination;
-import com.metallica.logistics.dao.TransportNominationImpl;
-import com.metallica.logistics.repository.CounterService;
+import com.metallica.logistics.dao.impl.TransportImpl;
+import com.metallica.logistics.dao.impl.TransportNominationImpl;
 import com.metallica.logistics.validation.LocationValidation;
 
 @Component
@@ -46,10 +46,11 @@ public class CommandTransportListner {
 		Action action = new ObjectMapper().readValue(mes, Action.class);
 
 		if (action.getCommand().equalsIgnoreCase(Action.ADD)) {
-			
-			/*if (!locationValidation.validateTransport(transportData))
-				return "Invalid Transport Data";
-			*/
+
+			/*
+			 * if (!locationValidation.validateTransport(transportData)) return
+			 * "Invalid Transport Data";
+			 */
 			transportData.setId("" + counterService.getNextSequence("user"));
 			System.out.println("transportData " + transportData);
 			transportImpl.addTransport(transportData);
@@ -57,27 +58,34 @@ public class CommandTransportListner {
 			return transportImpl.deleteTransport(transportData.getTransportId());
 
 		} else if (action.getCommand().equalsIgnoreCase(Action.UPDATE)) {
-			/*if (!locationValidation.validateTransport(transportData))
-				return "Invalid Transport Data";
-*/					ObjectMapper mapper = new ObjectMapper();
+			/*
+			 * if (!locationValidation.validateTransport(transportData)) return
+			 * "Invalid Transport Data";
+			 */ ObjectMapper mapper = new ObjectMapper();
 			Transport updateResult = transportImpl.updatetrade(transportData);
 			return mapper.writeValueAsString(updateResult);
 		} else if (action.getCommand().equalsIgnoreCase(Action.NOMINATE)) {
 			TransportNomination transportNom = new ObjectMapper().readValue(mes, TransportNomination.class);
-			nominateTransport(transportNom);
-			return "Transport Nominatied ";
+			return nominateTransport(transportNom);
+
 		}
 
 		return "" + transportData.getTransportId();
 
 	}
 
-	public void nominateTransport(TransportNomination transportNom) {
+	private String nominateTransport(TransportNomination transportNom) {
 
+		// Always tradeId in Space formated
+		String response = (String) template.convertSendAndReceive("trade", "tradeEvent",
+				transportNom.getBuyTradeId() + " " + transportNom.getSellTradeId());
+
+		if (response == null) {
+			return "failure due to invalid trade Id";
+		}
 		nominationImpl.addNomination(transportNom);
 
-		template.convertSendAndReceive("trade", "tradeEvent", transportNom.getBuyTradeId());
-		template.convertSendAndReceive("trade", "tradeEvent", transportNom.getSellTradeId());
+		return "SUCCESS";
 
 	}
 

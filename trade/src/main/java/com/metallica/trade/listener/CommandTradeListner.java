@@ -11,10 +11,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metallica.trade.TradeStatus;
-import com.metallica.trade.dao.Action;
 import com.metallica.trade.dao.Trade;
-import com.metallica.trade.dao.TradeImpl;
-import com.metallica.trade.repository.CounterService;
+import com.metallica.trade.dao.impl.TradeImpl;
+import com.metallica.trade.dao.util.Action;
+import com.metallica.trade.dao.util.CounterService;
 import com.metallica.trade.validation.EntityValidation;
 
 @Component

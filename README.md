@@ -1,36 +1,18 @@
-# sample Project to integrate graphqp amqplib mongodb rabbitmq springboot 
+# To run Application from command line follow Script-Command-line.txt 
 
-#   for windows only 
+#url to hit from browser for graphql query and mutation 
+#refere graphql-query-sample.txt
+http://localhost:4000/metallica
 
+ 
+# run using docker follow  Script-Docker.txt 
 
-#copy and paste below command in terminal inside git repo 
-
-cd trade
-mvn clean
-mvn package
-call START /B "service1" java -jar target\trade-0.0.1-SNAPSHOT.jar
-
-cd ../refdata
-mvn clean
-mvn package
-call START /B "service2" java -jar target\refdata-0.0.1-SNAPSHOT.jar
-
-cd ../logistics
-mvn clean
-mvn package
-call START /B "service3" java -jar target\logistics-0.0.1-SNAPSHOT.jar
-
-
-cd ../node-app
-npm install
-call START /B "service4" node lib\index.js
+#project road map upcoming 
+1. automate application up and running for all OS 
+2. Unit test cases 
 
 
 
-#All services is up and running now 
-#fire request from browser using graphql
-#http://localhost:4000/metallica
 
-#follow graphql.txt for mutation and query type input 
 
 

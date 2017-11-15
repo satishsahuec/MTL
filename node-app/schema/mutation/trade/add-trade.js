@@ -1,10 +1,50 @@
+'use strict'
 const {
   GraphQLInputObjectType,
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLID
+  GraphQLID,
+  GraphQLFloat
 } = require('graphql');
+
+const AddTradeInputType = new GraphQLInputObjectType({
+  name: 'AddTradeInput',
+  fields: {
+
+    command: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+
+    side: {
+      type: GraphQLString,
+      description: 'SELL or BUY '
+    },
+    quantity: {
+      type: GraphQLFloat
+    },
+    price: {
+      type: GraphQLFloat
+    },
+    tradeDate: {
+      type: GraphQLString,
+      description: 'Date must be in formate yyyy-mm-dd'
+    },
+    tradeStatus: {
+      type: GraphQLString,
+      description: ' OPEN '
+    },
+    counterParty: {
+      type: GraphQLString
+    },
+    commodity: {
+      type: GraphQLString
+    },
+    location: {
+      type: GraphQLString
+    }
+  }
+});
 
 
 const AddTradeOutput = new GraphQLObjectType({
@@ -16,45 +56,9 @@ const AddTradeOutput = new GraphQLObjectType({
   }
 });
 
-const AddTradeInputType = new GraphQLInputObjectType({
-  name: 'AddTradeInput',
-  fields: {
 
-    command: {
-      type: new GraphQLNonNull(GraphQLString)
-    },   
-    tradeId: {
-      type: GraphQLString
-    },
-    side: {
-      type: GraphQLString
-    },
-    quantity: {
-      type: GraphQLString
-    },
-    price: {
-      type: GraphQLString
-    },
-    tradeDate: {
-      type: GraphQLString
-    },
-    tradeStatus: {
-      type: GraphQLString
-    },
-    counterParty: {
-      type: GraphQLString
-    },
-    commodity: {
-      type: GraphQLString
-    },
-    location: {
-      type: GraphQLString
-    }
-
-
-  }
-});
-var corrId = require('../../../lib/randomnumber')();
+const messagePubSub = require('../../../message-broker/pub-sub');
+const tradeMessageConfig = require('../../../config/trade-message-config');
 
 module.exports = {
   type: AddTradeOutput,
@@ -63,48 +67,10 @@ module.exports = {
       type: new GraphQLNonNull(AddTradeInputType)
     }
   },
-  resolve(obj, {
-    input
-  }, {
-    amqp
-  }) {
+  resolve(obj, {input}, { amqp }) {
 
-    return name(amqp, input)
+    return {
+      tradeId: messagePubSub(amqp, input, tradeMessageConfig.exchangeName, tradeMessageConfig.commandQueueBinding)
+    }
   }
-}
-
-function name(amqp, input) {
-  return new Promise(function (resolve, reject) {
-    amqp.connect('amqp://localhost', function (err, conn) {
-      conn.createChannel(function (err, ch) {
-        ch.assertQueue('', {
-          exclusive: true
-        }, function (err, q) {
-          var corr = corrId;
-
-          ch.consume(q.queue, function (msg) {
-            if (msg.properties.correlationId == corr) {
-              console.log(' Response Got %s', msg.content.toString());
-              var t = {
-                tradeId: msg.content.toString()
-              }
-              resolve(t)
-              setTimeout(function () {
-                conn.close();
-              }, 500);
-
-            }
-          }, {
-            noAck: true
-          });
-          ch.publish('trade', 'tradeCommand', new Buffer(JSON.stringify(input)), {
-            correlationId: corr,
-            replyTo: q.queue
-          });
-        });
-      });
-    });
-
-
-  })
 }

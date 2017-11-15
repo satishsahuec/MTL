@@ -1,0 +1,16 @@
+#Contanerization the application 
+# docker image creation 
+#TODO pull image from docker hub in later version
+-- run below commands from git repo directory
+cd trade/Docker
+docker build -t satish/trade-service .
+
+cd ../../refdata/Docker
+docker build -t satish/refdata-service .
+ 
+cd ../../logistics/Docker
+ docker build -t satish/logistics-service .
+ 
+cd ../../
+
+docker-compose -f docker-compose.yml up

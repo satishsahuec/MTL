@@ -13,14 +13,8 @@ import com.metallica.trade.TradeStatus;
 @Document
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Trade implements Serializable   {
-	
-	// {"side":"BUY","quantity":"100","price":"200","tradeDate":"10/24/2017",
-			//"tradeStatus":"OPEN","counterParty":"APP","commodity":"AL","location":"KA"
-
 	@Id
-
 	private String tradeId;
-
 	private Side side;
 	private int quantity;
 	private double price;
@@ -32,21 +26,6 @@ public class Trade implements Serializable   {
 
 	public Trade() {
 	}
-
-/*	public Trade(String tradeId, Side side, int quantity, double price, String tradeDate, TradeStatus tradeStatus,
-			String counterParty, String commodity, String location) {
-		super();
-		this.tradeId = tradeId;
-		this.side = side;
-		this.quantity = quantity;
-		this.price = price;
-		this.tradeDate = tradeDate;
-		this.tradeStatus = tradeStatus;
-		this.counterParty = counterParty;
-		this.commodity = commodity;
-		this.location = location;
-	}*/
-
 
 	public String getTradeId() {
 		return tradeId;

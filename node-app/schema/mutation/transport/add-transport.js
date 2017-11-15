@@ -23,23 +23,24 @@ const AddTransportInputType = new GraphQLInputObjectType({
       type: new GraphQLNonNull(GraphQLString)
     },   
     origin: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
     destination: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
     loadingDate: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
     unloadingDate: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
     transportType: {
-      type: GraphQLString
+      type: new GraphQLNonNull(GraphQLString)
     },
   }
 });
-var corrId = require('../../../lib/randomnumber')();
+const messagePubSub = require('../../../message-broker/pub-sub');
+const transportMessageConfig = require('../../../config/transport-message-config');
 
 module.exports = {
   type: AddTransportOutput,
@@ -49,43 +50,9 @@ module.exports = {
     }
   },
   resolve(obj, {input}, {amqp}) {
-
-    return name(amqp, input)
+    console.log(transportMessageConfig.exchangeName)
+    console.log(transportMessageConfig.commandQueueBinding)
+    return {transportId : messagePubSub(amqp, input, transportMessageConfig.exchangeName ,transportMessageConfig.commandQueueBinding)}
   }
 }
 
-function name(amqp, input) {
-  return new Promise(function (resolve, reject) {
-    amqp.connect('amqp://localhost', function (err, conn) {
-      conn.createChannel(function (err, ch) {
-        ch.assertQueue('', {
-          exclusive: true
-        }, function (err, q) {
-          var corr = corrId;
-
-          ch.consume(q.queue, function (msg) {
-            if (msg.properties.correlationId == corr) {
-              console.log(' Response from Logistic  Got %s', msg.content.toString());
-              var objectMap = {
-                transportId: msg.content.toString()
-              }
-              resolve(objectMap)
-              setTimeout(function () {
-                conn.close();
-              }, 500);
-
-            }
-          }, {
-            noAck: true
-          });
-          ch.publish('logistic', 'logisticCommand', new Buffer(JSON.stringify(input)), {
-            correlationId: corr,
-            replyTo: q.queue
-          });
-        });
-      });
-    });
-
-
-  })
-}

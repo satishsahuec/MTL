@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+//Configuration for Rabbit Message Broker
 public class MessaageConfiguration {
 	// tradeEvent , tradeCommand, tradeReq
 
@@ -21,33 +22,33 @@ public class MessaageConfiguration {
 	private static class ReceiverConfig {
 
 		@Bean
-		public Queue autoDeleteQueue1() {
+		public Queue logisticCommand() {
 			return new Queue("logisticCommand");
 		}
 
 		@Bean
-		public Queue autoDeleteQueue2() {
+		public Queue logisticEvent() {
 			return new Queue("logisticEvent");
 		}
 
 		@Bean
-		public Queue autoDeleteQueue3() {
+		public Queue logisticReqRes() {
 			return new Queue("logisticReqRes");
 		}
 
 		@Bean
-		public Binding binding1a(DirectExchange logistic, Queue autoDeleteQueue1) {
-			return BindingBuilder.bind(autoDeleteQueue1).to(logistic).with("logisticCommand");
+		public Binding binding1a(DirectExchange logistic, Queue logisticCommand) {
+			return BindingBuilder.bind(logisticCommand).to(logistic).with("logisticCommand");
 		}
 
 		@Bean
-		public Binding binding1b(DirectExchange logistic, Queue autoDeleteQueue2) {
-			return BindingBuilder.bind(autoDeleteQueue2).to(logistic).with("logisticEvent");
+		public Binding binding1b(DirectExchange logistic, Queue logisticEvent) {
+			return BindingBuilder.bind(logisticEvent).to(logistic).with("logisticEvent");
 		}
 
 		@Bean
-		public Binding binding1c(DirectExchange logistic, Queue autoDeleteQueue3) {
-			return BindingBuilder.bind(autoDeleteQueue3).to(logistic).with("logisticReqRes");
+		public Binding binding1c(DirectExchange logistic, Queue logisticReqRes) {
+			return BindingBuilder.bind(logisticReqRes).to(logistic).with("logisticReqRes");
 		}
 
 	}

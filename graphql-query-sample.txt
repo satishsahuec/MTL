@@ -1,0 +1,158 @@
+======Delete Trade =======
+
+{
+  "input": {
+    "command": "delete",
+    "tradeId": "23"
+    
+    
+  }
+}
+
+mutation deleteTrade($input: DeleteTradeInput!) {
+  DeleteTrade(input: $input) {
+    deleteResult
+  }
+}
+
+==========================
+=====Add Trade ===========
+{
+  "input": {
+    "command": "add",
+    "side": "SELL",
+    "quantity": 90.99,
+    "price": 88.99,
+    "tradeDate": "2017-09-09",
+    "tradeStatus": "OPEN",
+    "counterParty": "APP",
+    "commodity": "AL",
+    "location": "KA"
+  }
+}
+
+mutation AddTrade($input: AddTradeInput!) {
+  AddTrade(input: $input) {
+    tradeId
+  }
+}
+=============
+
+========== update trade ==========
+
+mutation updateTrade($input: UpdateTradeInput!) {
+  UpdateTrade(input: $input) {
+    side
+    id
+    quantity
+    price
+    tradeDate
+    tradeStatus
+    counterParty
+    commodity
+    location
+  }
+}
+
+
+
+{
+  "input": {
+    "command": "update",
+    "id": "12",    
+    "side": "SELL",
+    "quantity": "90",
+    "price": "99",
+    "tradeDate": "2017-09-09",
+    "tradeStatus": "OPEN",
+    "counterParty": "APP",
+    "commodity": "AL",
+    "location": "KA"
+  }
+}
+
+==========search trade ==========
+
+{
+  "input": {
+    "command": "search",
+    
+  }
+}
+
+
+query my($input: SearchTradeInput!) {
+  SearchTrade(input: $input) {
+    tradeId
+    side
+    price
+    tradeDate
+    counterParty
+    commodity
+    location
+    
+  }
+}
+
+
+==============================================================
+Logistic 
+
+========add transport=========
+
+mutation ADDTransport($input: AddTransportInput!) {
+  AddTransport(input: $input) {
+    transportId
+  }
+}
+
+{
+  "input": {
+    "command": "add",
+    "origin": "LON",
+    "destination": "KA",
+    "loadingDate": "2017-09-09",
+    "unloadingDate": "2017-09-09",
+    "transportType": "SHIP"
+    
+  }
+}
+=====delet transport ======
+
+mutation deleteTransport($input: DeleteTransportInput!) {
+  DeleteTransport(input: $input) {
+   deleteResult
+  }
+}
+
+{
+  "input": {
+    "command": "delete",
+    "transportId": "7"
+    
+  }
+}
+
+==========update transport ==========
+
+mutation updateTransport($input: UpdateTransportInput!) {
+  UpdateTransport(input: $input) {
+    transportId
+    destination
+    destination
+    loadingDate
+    transportType
+  }
+}
+
+{
+  "input": {
+    "command": "update",
+    "transportId": "7",
+    "origin": "LON",
+    "destination": "KA",
+    "loadingDate": "2017-09-09",
+    "unloadingDate": "2017-09-09",
+    "transportType": "RAIL"
+  }
+}

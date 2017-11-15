@@ -1,0 +1,37 @@
+version: '1'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+     - "27017:27017"
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+     - "5672:5672"
+     - "15672:15672"
+  refdata:
+    image: satish/refdata-service
+    container_name: refdata
+    ports:
+     - "7070"
+    depends_on:
+     - mongodb
+     - rabbitmq
+  trade:
+    image: satish/trade-service
+    container_name: trade
+    depends_on:
+     - mongodb
+     - rabbitmq
+    ports:
+      - "8080"
+  logistics:
+    image: satish/logistics-service
+    container_name: logistics
+    depends_on:
+     - rabbitmq
+     - mongodb
+    ports:
+     - "9090"

@@ -3,6 +3,7 @@ package com.metallica.refdata.dao;
 public class Commodity {
 
 	private String name;
+	//Code is unique for each commodity 
 	private String code;
 	
 	

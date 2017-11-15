@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoOperations;
 
-import com.metallica.trade.dao.Counter;
+import com.metallica.trade.dao.util.Counter;
 
 @SpringBootApplication
 public class TradeApp implements CommandLineRunner {
@@ -24,8 +24,9 @@ public class TradeApp implements CommandLineRunner {
 
 	public void run(String... args) throws Exception {
 
-		Counter count = new Counter("user", 0);
 
-		mongoOperation.save(count, "counter");
+		Counter count = new Counter("user", 0);
+		if (!mongoOperation.collectionExists("counter"))
+			mongoOperation.save(count, "counter");
 	}
 }

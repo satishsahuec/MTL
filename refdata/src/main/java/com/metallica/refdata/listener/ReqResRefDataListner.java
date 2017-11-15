@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.metallica.refdata.dao.Action;
+import com.metallica.refdata.dao.util.Action;
 import com.metallica.refdata.dao.Commodity;
-import com.metallica.refdata.dao.CommodityImpl;
+import com.metallica.refdata.dao.impl.CommodityImpl;
 import com.metallica.refdata.dao.CounterParty;
-import com.metallica.refdata.dao.CounterPartyImpl;
 import com.metallica.refdata.dao.Location;
-import com.metallica.refdata.dao.LocationImpl;
+import com.metallica.refdata.dao.impl.CounterPartyImpl;
+import com.metallica.refdata.dao.impl.LocationImpl;
 
 @Component
 public class ReqResRefDataListner {

@@ -6,88 +6,55 @@ const {
   GraphQLID,
   GraphQLList
 } = require('graphql');
-const TradeObject = require('../trade-object');
+const TransportObject = require('../transport-object');
 
 
 
-const SearchTradeInputType = new GraphQLInputObjectType({
-  name: 'SearchTradeInput',
+const SearchTransportInputType = new GraphQLInputObjectType({
+  name: 'SearchTransportInput',
+  description : 'Date must be in yyyy-mm-dd formate',
   fields: {
-
+    
     command: {
       type: new  GraphQLNonNull(GraphQLString)
     },
-    buySide: {
+    origin: {
       type: GraphQLString
     },
-    sellSide: {
+    destination: {
       type: GraphQLString
     },     
-    fromtradeDate: {
+    fromLoadingDate: {
       type: GraphQLString
     },   
-    totradeDate: {
+    toLoadingDate: {
       type: GraphQLString
     }, 
-    counterParty: {
+    fromUnloadingDate: {
       type: GraphQLString
     },
-    commodity: {
+    toUnloadingDate: {
       type: GraphQLString
     },
-    location: {
+    transportType: {
       type: GraphQLString
     },
 
   }
 });
-var corrId = require('../../../lib/randomnumber')();
+const messagePubSub = require('../../../message-broker/pub-sub');
+const transportMessageConfig = require('../../../config/transport-message-config');
 
 module.exports = {
-  type: new GraphQLList(TradeObject),
+  type: new GraphQLList(TransportObject),
   args: {
     input: {
-      type: new GraphQLNonNull(SearchTradeInputType)
+      type: new GraphQLNonNull(SearchTransportInputType)
     }
   },
    
   resolve(obj, { input}, { amqp }) {
 
-    return name(amqp, input)
+    return messagePubSub(amqp, input ,transportMessageConfig.exchangeName, transportMessageConfig.reqresQueueBinding)
   }
-}
-
-function name(amqp, input) {
-  return new Promise(function (resolve, reject) {
-
-    console.log('input')
-    amqp.connect('amqp://localhost', function (err, conn) {
-      conn.createChannel(function (err, ch) {
-        ch.assertQueue('', {
-          exclusive: true
-        }, function (err, q) {
-          var corr = corrId;
-
-          ch.consume(q.queue, function (msg) {
-            if (msg.properties.correlationId == corr) {
-              console.log(' Response Got %s', msg.content.toString());
-              resolve(JSON.parse(msg.content.toString()))
-              setTimeout(function () {
-                conn.close();
-              }, 500);
-
-            }
-          }, {
-            noAck: true
-          });
-          ch.publish('trade', 'tradeReqRes', new Buffer(JSON.stringify(input)), {
-            correlationId: corr,
-            replyTo: q.queue
-          });
-        });
-      });
-    });
-
-
-  })
 }
